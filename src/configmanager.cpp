@@ -20,6 +20,7 @@ void defaultConfig() {
   cfg.txpower = LORATXPOWDEFAULT; // 0-15, lora tx power
   cfg.adrmode = 1;                // 0=disabled, 1=enabled
   cfg.screensaver = 0;            // 0=disabled, 1=enabled
+  //bart 0
   cfg.screenon = 1;               // 0=disabled, 1=enabled
   cfg.countermode = COUNTERMODE;  // 0=cyclic, 1=cumulative, 2=cyclic confirmed
   cfg.rssilimit = 0;              // threshold for rssilimiter, negative value!
