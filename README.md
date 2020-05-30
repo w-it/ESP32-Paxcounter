@@ -1,4 +1,4 @@
-# www.pdrukteradar.be
+# www.drukteradar.be
 **Wifi driven sensor**
 
 
