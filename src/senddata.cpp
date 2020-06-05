@@ -3,6 +3,8 @@
 
 Ticker sendcycler;
 
+int interval = 0;
+
 void sendcycle() {
   xTaskNotifyFromISR(irqHandlerTask, SENDCYCLE_IRQ, eSetBits, NULL);
 }
@@ -109,10 +111,24 @@ void sendData() {
         get_salt();       // get new salt for salting hashes
         ESP_LOGI(TAG, "Counter cleared");
       }
+
+  
+
 #ifdef HAS_DISPLAY
       else
         dp_plotCurve(macs.size(), true);
 #endif
+
+      if (interval % 3 == 0){
+         ESP_LOGI(TAG, "Send status");
+        payload.reset();
+        payload.addStatus(read_voltage(), uptime() / 1000, temperatureRead(),
+                    getFreeRAM(), rtc_get_reset_reason(0),
+                    rtc_get_reset_reason(1));
+         SendPayload(STATUSPORT, prio_high);
+      }
+
+      interval ++;
       break;
 #endif
 

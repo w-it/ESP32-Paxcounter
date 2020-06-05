@@ -210,11 +210,12 @@ uint16_t read_voltage(void) {
   return voltage;
 }
 
-uint8_t read_battlevel(mapFn_t mapFunction) {
+
+uint8_t _read_battlevel(mapFn_t mapFunction) {
   // returns the estimated battery level in values 0 ... 100 [percent]
 #ifdef HAS_IP5306
   return IP5306_GetBatteryLevel();
-#else
+#else 
   const uint16_t batt_voltage = read_voltage();
   if (batt_voltage <= BAT_MIN_VOLTAGE)
     return 0;
@@ -223,6 +224,12 @@ uint8_t read_battlevel(mapFn_t mapFunction) {
   else
     return (*mapFunction)(batt_voltage, BAT_MIN_VOLTAGE, BAT_MAX_VOLTAGE);
 #endif
+}
+
+uint8_t read_battlevel(mapFn_t mapFunction) {
+  const uint8_t battLevel = _read_battlevel(mapFunction);
+  ESP_LOGI(TAG, "read battery level: %d", battLevel);
+  return battLevel;
 }
 
 bool batt_sufficient() {
