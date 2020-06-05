@@ -22,6 +22,8 @@ void button_init(int pin) {
   b->setOnDoubleClicked([]() {});
 
   b->setOnClicked([]() {
+    ESP_LOGI("button clicked");
+
 #ifdef HAS_DISPLAY
     dp_refresh(true); // switch to next display page
 #endif
@@ -31,6 +33,8 @@ void button_init(int pin) {
   });
 
   b->setOnHolding([]() {
+    ESP_LOGI("button long press");
+
     payload.reset();
     payload.addButton(0x01);
     SendPayload(BUTTONPORT, prio_normal);
