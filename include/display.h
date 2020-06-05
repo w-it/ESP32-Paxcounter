@@ -12,6 +12,14 @@
 
 #define DISPLAY_PAGES (7) // number of paxcounter display pages
 
+
+#if (HAS_DISPLAY) == 0
+#define MY_FONT_SMALL 0
+#define MY_FONT_NORMAL 0
+#define MY_FONT_LARGE 0
+#define MY_FONT_STRETCHED 0
+#endif
+
 // settings for OLED display library
 #if (HAS_DISPLAY) == 1
 #define MY_FONT_SMALL FONT_SMALL
