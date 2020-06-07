@@ -106,8 +106,8 @@ void AXP192_showstatus(void) {
     ESP_LOGI(TAG, "No Battery");
 
   if (pmu.isVBUSPlug())
-    ESP_LOGI(TAG, "USB powered, %.0fmW",
-             pmu.getVbusVoltage() / 1000 * pmu.getVbusCurrent());
+    ESP_LOGI(TAG, "USB powered, %.0fmW ( %.0fmV x  %.0fmA) ",
+             pmu.getVbusVoltage() / 1000 * pmu.getVbusCurrent(), pmu.getVbusVoltage() ,  pmu.getVbusCurrent());
   else
     ESP_LOGI(TAG, "USB not present");
 }
@@ -179,7 +179,13 @@ uint16_t read_voltage(void) {
   uint16_t voltage = 0;
 
 #ifdef HAS_PMU
-  voltage = pmu.getBattVoltage();
+  if (pmu.isBatteryConnect()){
+      voltage = pmu.getBattVoltage();
+  } else{
+    if (pmu.isVBUSPlug()){
+      voltage = pmu.getVbusVoltage();
+    }
+  }
 #else
 
 #ifdef BAT_MEASURE_ADC

@@ -35,7 +35,7 @@ void defaultConfig() {
   cfg.wifiant = 0;                 // 0=internal, 1=external (for LoPy/LoPy4)
   cfg.vendorfilter = VENDORFILTER; // 0=disabled, 1=enabled
   cfg.rgblum = RGBLUMINOSITY;      // RGB Led luminosity (0..100%)
-  cfg.monitormode = 0;             // 0=disabled, 1=enabled
+  cfg.monitormode = 1;             // 0=disabled, 1=enabled
   cfg.payloadmask = PAYLOADMASK;   // all payload switched on
   cfg.bsecstate[BSEC_MAX_STATE_BLOB_SIZE] = {
       0}; // init BSEC state for BME680 sensor
@@ -351,7 +351,7 @@ void loadConfig() {
       ESP_LOGI(TAG, "payloadmask set to default %hhu", cfg.payloadmask);
       saveConfig();
     }
-
+    
     if (nvs_get_i8(my_handle, "monitormode", &flash8) == ESP_OK) {
       cfg.monitormode = flash8;
       ESP_LOGI(TAG, "Monitor mode = %d", flash8);

@@ -18,6 +18,13 @@ uint16_t get_salt(void) {
 }
 
 int8_t isBeacon(uint64_t mac) {
+
+        //  ESP_LOGI(TAG, "Beacon (should be 0x5AAD77F8502F)  0x%" PRIx64 , mac);
+
+/*std::for_each(beacons.begin(), beacons.end(), [](uint64_t x) { 
+   ESP_LOGI(TAG, "Beacon  0x%" PRIx64 , x);
+ });*/
+
   it = std::find(beacons.begin(), beacons.end(), mac);
   if (it != beacons.end())
     return std::distance(beacons.begin(), it);
@@ -98,7 +105,7 @@ bool mac_add(uint8_t *paddr, int8_t rssi, bool sniff_type) {
 #endif
       }
 #endif
-
+ 
       // in beacon monitor mode check if seen MAC is a known beacon
       if (cfg.monitormode) {
         beaconID = isBeacon(macConvert(paddr));
