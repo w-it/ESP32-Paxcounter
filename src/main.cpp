@@ -237,6 +237,11 @@ void setup() {
 
 #endif // HAS_LED
 
+#ifdef HAS_PMU
+  //turn off led  
+  pmu.setChgLEDMode(AXP20X_LED_OFF);
+#endif
+
 #if (HAS_LED != NOT_A_PIN) || defined(HAS_RGB_LED)
   // start led loop
   ESP_LOGI(TAG, "Starting LED Controller...");
