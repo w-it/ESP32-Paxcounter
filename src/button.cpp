@@ -19,10 +19,12 @@ void button_init(int pin) {
 
   // attach events to the button
 
-  b->setOnDoubleClicked([]() {});
+  b->setOnDoubleClicked([]() {
+     ESP_LOGI(TAG,"button double clicked");
+  });
 
   b->setOnClicked([]() {
-    ESP_LOGI("button clicked");
+    ESP_LOGI(TAG,"button clicked");
 
 #ifdef HAS_DISPLAY
     dp_refresh(true); // switch to next display page
@@ -33,7 +35,7 @@ void button_init(int pin) {
   });
 
   b->setOnHolding([]() {
-    ESP_LOGI("button long press");
+    ESP_LOGI(TAG,"button long press");
 
     payload.reset();
     payload.addButton(0x01);
