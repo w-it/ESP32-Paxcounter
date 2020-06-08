@@ -93,15 +93,27 @@ void AXP192_power(pmu_power_t powerlevel) {
     break;
   }
 }
+void setGpsOff(void){
+  ESP_LOGI(TAG, "GPS off");
+  pmu.setChgLEDMode(AXP20X_LED_OFF);
+  pmu.setPowerOutPut(AXP192_LDO3, AXP202_OFF); // gps off
+}
+void setGpsOn(void){
+  ESP_LOGI(TAG, "GPS on");
+  pmu.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
+  pmu.setPowerOutPut(AXP192_LDO3, AXP202_ON); // gps on
+}
 
 void AXP192_showstatus(void) {
 
-  if (pmu.isBatteryConnect())
+  if (pmu.isBatteryConnect()){
+      
     if (pmu.isChargeing())
       ESP_LOGI(TAG, "Battery charging, %.2fV @ %.0fmAh",
                pmu.getBattVoltage() / 1000, pmu.getBattChargeCurrent());
     else
       ESP_LOGI(TAG, "Battery not charging");
+  }
   else
     ESP_LOGI(TAG, "No Battery");
 
@@ -109,7 +121,7 @@ void AXP192_showstatus(void) {
     ESP_LOGI(TAG, "USB powered, %.0fmW ( %.0fmV x  %.0fmA) ",
              pmu.getVbusVoltage() / 1000 * pmu.getVbusCurrent(), pmu.getVbusVoltage() ,  pmu.getVbusCurrent());
   else
-    ESP_LOGI(TAG, "USB not present");
+    ESP_LOGI(TAG, "Battery powered, %.0fmV", pmu.getBattVoltage());
 }
 
 void AXP192_init(void) {
@@ -179,12 +191,13 @@ uint16_t read_voltage(void) {
   uint16_t voltage = 0;
 
 #ifdef HAS_PMU
-  if (pmu.isBatteryConnect()){
-      voltage = pmu.getBattVoltage();
-  } else{
-    if (pmu.isVBUSPlug()){
-      voltage = pmu.getVbusVoltage();
-    }
+  if (pmu.isVBUSPlug()){
+    voltage = pmu.getVbusVoltage();
+  }
+  else{
+    if (pmu.isBatteryConnect()){
+        voltage = pmu.getBattVoltage();
+    } 
   }
 #else
 
@@ -217,7 +230,7 @@ uint16_t read_voltage(void) {
 }
 
 
-uint8_t _read_battlevel(mapFn_t mapFunction) {
+uint8_t read_battlevel(mapFn_t mapFunction) {
   // returns the estimated battery level in values 0 ... 100 [percent]
 #ifdef HAS_IP5306
   return IP5306_GetBatteryLevel();
@@ -232,11 +245,7 @@ uint8_t _read_battlevel(mapFn_t mapFunction) {
 #endif
 }
 
-uint8_t read_battlevel(mapFn_t mapFunction) {
-  const uint8_t battLevel = _read_battlevel(mapFunction);
-  ESP_LOGI(TAG, "read battery level: %d", battLevel);
-  return battLevel;
-}
+
 
 bool batt_sufficient() {
 #if (defined HAS_PMU || defined BAT_MEASURE_ADC || defined HAS_IP5306)

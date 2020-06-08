@@ -113,9 +113,11 @@ void set_display(uint8_t val[]) {
 void set_gps(uint8_t val[]) {
   ESP_LOGI(TAG, "Remote command: set GPS mode to %s", val[0] ? "on" : "off");
   if (val[0]) {
-    cfg.payloadmask |= (uint8_t)GPS_DATA; // set bit in mask
+      ESP_LOGI(TAG,"GPS ON");
+      setGpsOn();
   } else {
-    cfg.payloadmask &= (uint8_t)~GPS_DATA; // clear bit in mask
+      ESP_LOGI(TAG,"GPS OFF");
+      setGpsOff();
   }
 }
 

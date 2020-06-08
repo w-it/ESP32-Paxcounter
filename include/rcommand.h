@@ -14,6 +14,8 @@
 #include "timekeeper.h"
 #include "timesync.h"
 #include "blescan.h"
+#include "power.h"
+
 
 // table of remote commands and assigned functions
 typedef struct {
