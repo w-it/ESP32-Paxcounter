@@ -315,7 +315,7 @@ void setup() {
 #if (HAS_LORA)
   strcat_P(features, " LORA");
   // kick off join, except we come from sleep
-  assert(lora_stack_init(RTC_runmode == RUNMODE_WAKEUP ? false : true) ==
+  assert(lora_stack_init(RTC_runmode == RUNMODE_WAKEUP ? true : true) ==
          ESP_OK);
 #endif
 

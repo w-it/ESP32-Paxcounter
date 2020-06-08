@@ -66,7 +66,7 @@ void do_after_reset(int reason) {
 
 void enter_deepsleep(const int wakeup_sec, const gpio_num_t wakeup_gpio) {
 
-  if ((!wakeup_sec) && (!wakeup_gpio) && (RTC_runmode == RUNMODE_NORMAL))
+ if ((!wakeup_sec) && (!wakeup_gpio) && (RTC_runmode == RUNMODE_NORMAL))
     return;
 
 // assure LMIC is in safe state
@@ -83,7 +83,7 @@ void enter_deepsleep(const int wakeup_sec, const gpio_num_t wakeup_gpio) {
 
   // set wakeup timer
   if (wakeup_sec)
-    esp_sleep_enable_timer_wakeup(wakeup_sec * 1000000);
+    esp_sleep_enable_timer_wakeup(wakeup_sec * 1000000ULL); // https://github.com/espressif/arduino-esp32/commit/ec40c4c96f9088956ed95f5207b9385f33689602#diff-ebed54904521849494936ae91d51e406
 
   // set wakeup gpio
   if (wakeup_gpio != NOT_A_PIN) {

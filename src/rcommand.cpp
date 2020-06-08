@@ -339,6 +339,13 @@ void set_flush(uint8_t val[]) {
   // used to open receive window on LoRaWAN class a nodes
 };
 
+void set_sleep(uint8_t val[]){    
+  ESP_LOGI(TAG, "Remote command: sleep");
+  uint8_t value = val[0];  
+  ESP_LOGI(TAG, "sleep value %d minutes", value * 5);
+  enter_deepsleep(value * 60 * 5, HAS_BUTTON);
+}
+
 // assign previously defined functions to set of numeric remote commands
 // format: opcode, function, #bytes params,
 // flag (true = do make settings persistent / false = don't)
@@ -359,7 +366,7 @@ static const cmd_t table[] = {
     {0x81, get_status, 0, false},       {0x83, get_batt, 0, false},
     {0x84, get_gps, 0, false},          {0x85, get_bme, 0, false},
     {0x86, get_time, 0, false},         {0x87, set_time, 0, false},
-    {0x99, set_flush, 0, false}};
+    {0x99, set_flush, 0, false},        {0x66, set_sleep, 1, false}};
 
 static const uint8_t cmdtablesize =
     sizeof(table) / sizeof(table[0]); // number of commands in command table
