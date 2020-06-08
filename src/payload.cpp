@@ -77,7 +77,6 @@ void PayloadConvert::addStatus(uint16_t voltage, uint64_t uptime, float cputemp,
   buffer[cursor++] = (byte)((mem & 0x000000FF));
   buffer[cursor++] = (byte)(reset1);
   buffer[cursor++] = (byte)(reset2);
-  buffer[cursor++] = (byte)(batt_level);
 }
 
 void PayloadConvert::addGPS(gpsStatus_t value) {
@@ -201,7 +200,6 @@ void PayloadConvert::addStatus(uint16_t voltage, uint64_t uptime, float cputemp,
   writeUint32(mem);
   writeUint8(reset1);
   writeUint8(reset2);
-  writeUint8(batt_level);
 }
 
 void PayloadConvert::addGPS(gpsStatus_t value) {
