@@ -95,12 +95,10 @@ void AXP192_power(pmu_power_t powerlevel) {
 }
 void setGpsOff(void){
   ESP_LOGI(TAG, "GPS off");
-  pmu.setChgLEDMode(AXP20X_LED_OFF);
   pmu.setPowerOutPut(AXP192_LDO3, AXP202_OFF); // gps off
 }
 void setGpsOn(void){
   ESP_LOGI(TAG, "GPS on");
-  pmu.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
   pmu.setPowerOutPut(AXP192_LDO3, AXP202_ON); // gps on
 }
 

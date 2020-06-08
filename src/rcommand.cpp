@@ -112,6 +112,8 @@ void set_display(uint8_t val[]) {
 
 void set_gps(uint8_t val[]) {
   ESP_LOGI(TAG, "Remote command: set GPS mode to %s", val[0] ? "on" : "off");
+
+#ifdef HAS_PMU
   if (val[0]) {
       ESP_LOGI(TAG,"GPS ON");
       setGpsOn();
@@ -119,6 +121,7 @@ void set_gps(uint8_t val[]) {
       ESP_LOGI(TAG,"GPS OFF");
       setGpsOff();
   }
+#endif
 }
 
 void set_bme(uint8_t val[]) {

@@ -34,6 +34,9 @@ void AXP192_power(pmu_power_t powerlevel);
 void AXP192_init(void);
 void AXP192_showstatus(void);
 
+void setGpsOff(void);
+void setGpsOn(void);
+
 #endif // HAS_PMU
 
 #ifdef HAS_IP5306
