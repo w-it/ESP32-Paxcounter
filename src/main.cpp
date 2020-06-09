@@ -105,6 +105,15 @@ Timezone myTZ(myDST, mySTD);
 // local Tag for logging
 static const char TAG[] = __FILE__;
 
+
+static void gpsenable_loop(void* pvParameters){
+  while(1)
+  {    
+   ESP_LOGI(TAG, "looping GPS Enabled Feed...");
+   delay(5000);
+  }
+}
+
 void setup() {
 
   char features[100] = "";
@@ -309,6 +318,17 @@ void setup() {
                             1);        // CPU core
   }
 #endif
+
+    strcat_P(features, " NRGY-HOUSEKEEPING");
+
+    ESP_LOGI(TAG, "Starting HOUSEKEEPING...");
+    xTaskCreatePinnedToCore(nrgy_loop,  // task function
+                            "energyhousekeeping", // name of task
+                            2048,      // stack size of task
+                            (void *)1, // parameter of the task
+                            1,         // priority of the task
+                            &NrgyHouseKeepingTask,  // task handle
+                            1);        // CPU core
 
 // initialize sensors
 #if (HAS_SENSORS)

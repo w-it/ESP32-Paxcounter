@@ -7,6 +7,7 @@
 #include "irqhandler.h"
 #include "timesync.h"
 #include "gpsread.h"
+#include "energyhousekeeping.h"
 #include "if482.h"
 #include "dcf77.h"
 

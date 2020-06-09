@@ -116,11 +116,9 @@ void set_gps(uint8_t val[]) {
 #ifdef HAS_PMU
   if (val[0]) {
       ESP_LOGI(TAG,"GPS ON");
-      cfg.payloadmask |= (uint8_t)GPS_DATA; // set bit in mask
       setGpsOn();
   } else {
       ESP_LOGI(TAG,"GPS OFF");
-      cfg.payloadmask &= (uint8_t)~GPS_DATA; // clear bit in mask
       setGpsOff();
   }
 #endif

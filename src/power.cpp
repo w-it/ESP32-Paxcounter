@@ -95,10 +95,12 @@ void AXP192_power(pmu_power_t powerlevel) {
 }
 void setGpsOff(void){
   ESP_LOGI(TAG, "GPS off");
+  cfg.payloadmask &= (uint8_t)~GPS_DATA; // clear bit in mask
   pmu.setPowerOutPut(AXP192_LDO3, AXP202_OFF); // gps off
 }
 void setGpsOn(void){
   ESP_LOGI(TAG, "GPS on");
+  cfg.payloadmask |= (uint8_t)GPS_DATA; // set bit in mask
   pmu.setPowerOutPut(AXP192_LDO3, AXP202_ON); // gps on
 }
 

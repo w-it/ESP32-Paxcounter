@@ -3,8 +3,6 @@
 
 Ticker sendcycler;
 
-int interval = 0;
-
 void sendcycle() {
   xTaskNotifyFromISR(irqHandlerTask, SENDCYCLE_IRQ, eSetBits, NULL);
 }
@@ -90,6 +88,10 @@ void sendData() {
         if (gps_hasfix()) {
           gps_storelocation(&gps_status);
           payload.addGPS(gps_status);
+
+          //disable GPS 
+          ESP_LOGI(TAG, "GPS sent - turn off now");
+          setGpsOff();
         } else
           ESP_LOGD(TAG, "No valid GPS position");
       }
@@ -119,16 +121,7 @@ void sendData() {
         dp_plotCurve(macs.size(), true);
 #endif
 
-      if (interval % 3 == 0){
-         ESP_LOGI(TAG, "Send status");
-        payload.reset();
-        payload.addStatus(read_voltage(), uptime() / 1000, temperatureRead(),
-                    getFreeRAM(), rtc_get_reset_reason(0),
-                    rtc_get_reset_reason(1));
-         SendPayload(STATUSPORT, prio_high);
-      }
-
-      interval ++;
+     
       break;
 #endif
 
