@@ -30,6 +30,10 @@ void get_hard_deveui(uint8_t *pdeveui);
 void os_getDevKey(u1_t *buf);
 void os_getArtEui(u1_t *buf);
 void os_getDevEui(u1_t *buf);
+
+uint32_t getChipId(void);
+lora_t findMatchingConfig(void);
+
 void lora_send(void *pvParameters);
 void lora_enqueuedata(MessageBuffer_t *message);
 void lora_queuereset(void);

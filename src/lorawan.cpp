@@ -135,16 +135,44 @@ void RevBytes(unsigned char *b, size_t c) {
   }
 }
 
+
+
+uint32_t getChipId(void){
+    uint64_t macAddress = ESP.getEfuseMac();
+    uint64_t macAddressTrunc = macAddress << 40;
+    uint32_t chipId = macAddressTrunc >> 40;
+
+    ESP_LOGI(TAG, "Macadress  0x%" PRIx64 , macAddress);
+    ESP_LOGI(TAG," ESP8266 Chip id = %08X", chipId);
+
+    return chipId;
+
+}
+
+
+lora_t findMatchingConfig(){
+  uint32_t chipId = getChipId();
+  int i = loratablesize;
+
+  while (i--) {
+    ESP_LOGI(TAG,"there is config for: %08X ", lora_table[i].chipId);
+    if (chipId == lora_table[i].chipId){
+        ESP_LOGI(TAG,"config enabled for %08X ", chipId);
+        return lora_table[i];
+    }
+  }
+}
+
 // LMIC callback functions
 void os_getDevKey(u1_t *buf) {
 #ifndef LORA_ABP
-  memcpy(buf, APPKEY, 16);
+  memcpy(buf, findMatchingConfig().APPKEY, 16);  
 #endif
 }
 
 void os_getArtEui(u1_t *buf) {
 #ifndef LORA_ABP
-  memcpy(buf, APPEUI, 8);
+  memcpy(buf, findMatchingConfig().APPEUI, 8);
   RevBytes(buf, 8); // TTN requires it in LSB First order, so we swap bytes
 #endif
 }
@@ -152,7 +180,8 @@ void os_getArtEui(u1_t *buf) {
 void os_getDevEui(u1_t *buf) {
 #ifndef LORA_ABP
   int i = 0, k = 0;
-  memcpy(buf, DEVEUI, 8); // get fixed DEVEUI from loraconf.h
+  memcpy(buf, findMatchingConfig().DEVEUI, 8); // get fixed DEVEUI from loraconf.h
+  
   for (i = 0; i < 8; i++) {
     k += buf[i];
   }
@@ -214,11 +243,14 @@ void showLoraKeys(void) {
   // all EUI buffer so we do it here to a temp
   // buffer to be able to display them
   uint8_t buf[32];
-  os_getDevEui((u1_t *)buf);
+  lora_t config = findMatchingConfig()
+
+
+  os_getDevEui(config, (u1_t *)buf);
   printKey("DevEUI", buf, 8, true);
-  os_getArtEui((u1_t *)buf);
+  os_getArtEui(config, (u1_t *)buf);
   printKey("AppEUI", buf, 8, true);
-  os_getDevKey((u1_t *)buf);
+  os_getDevKey(config, (u1_t *)buf);
   printKey("AppKey", buf, 16, false);
 }
 
