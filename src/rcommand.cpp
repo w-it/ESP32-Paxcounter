@@ -348,7 +348,12 @@ void set_sleep(uint8_t val[]){
   ESP_LOGI(TAG, "Remote command: sleep");
   uint8_t value = val[0];  
   ESP_LOGI(TAG, "sleep value %d minutes", value * 5);
-  enter_deepsleep(value * 60 * 5, HAS_BUTTON);
+  #ifdef HAS_BUTTON 
+    enter_deepsleep(value * 60 * 5, HAS_BUTTON); 
+  #endif
+  #ifndef HAS_BUTTON
+    enter_deepsleep(value * 60 * 5, GPIO_NUM_0); 
+  #endif
 }
 
 // assign previously defined functions to set of numeric remote commands
