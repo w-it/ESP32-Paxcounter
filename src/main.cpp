@@ -378,16 +378,6 @@ xTaskCreatePinnedToCore(nrgy_loop,  // task function
   init_matrix_display(); // note: blocking call
 #endif
 
-// show payload encoder
-#if PAYLOAD_ENCODER == 1
-  strcat_P(features, " PLAIN");
-#elif PAYLOAD_ENCODER == 2
-  strcat_P(features, " PACKED");
-#elif PAYLOAD_ENCODER == 3
-  strcat_P(features, " LPPDYN");
-#elif PAYLOAD_ENCODER == 4
-  strcat_P(features, " LPPPKD");
-#endif
 
 // initialize RTC
 #ifdef HAS_RTC

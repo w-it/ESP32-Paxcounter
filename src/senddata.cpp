@@ -15,32 +15,8 @@ void SendPayload(uint8_t port, sendprio_t prio) {
 
   SendBuffer.MessageSize = payload.getSize();
   SendBuffer.MessagePrio = prio;
-
-  switch (PAYLOAD_ENCODER) {
-  case 1: // plain -> no mapping
-  case 2: // packed -> no mapping
-    SendBuffer.MessagePort = port;
-    break;
-  case 3: // Cayenne LPP dynamic -> all payload goes out on same port
-    SendBuffer.MessagePort = CAYENNE_LPP1;
-    break;
-  case 4: // Cayenne LPP packed -> we need to map some paxcounter ports
-    SendBuffer.MessagePort = CAYENNE_LPP2;
-    switch (SendBuffer.MessagePort) {
-    case COUNTERPORT:
-      SendBuffer.MessagePort = CAYENNE_LPP2;
-      break;
-    case RCMDPORT:
-      SendBuffer.MessagePort = CAYENNE_ACTUATOR;
-      break;
-    case TIMEPORT:
-      SendBuffer.MessagePort = CAYENNE_DEVICECONFIG;
-      break;
-    }
-    break;
-  default:
-    SendBuffer.MessagePort = port;
-  }
+  SendBuffer.MessagePort = port;
+  
   memcpy(SendBuffer.Message, payload.getBuffer(), SendBuffer.MessageSize);
 
 // enqueue message in device's send queues
@@ -76,12 +52,12 @@ void sendData() {
 #if ((WIFICOUNTER) || (BLECOUNTER))
     case COUNT_DATA:
       payload.reset();
-#if !(PAYLOAD_OPENSENSEBOX)
+
       if (cfg.wifiscan)
         payload.addCount(macs_wifi, MAC_SNIFF_WIFI);
       if (cfg.blescan)
         payload.addCount(macs_ble, MAC_SNIFF_BLE);
-#endif
+
 #if (HAS_GPS)
       if (GPSPORT == COUNTERPORT) {
         // send GPS position only if we have a fix
@@ -96,12 +72,7 @@ void sendData() {
           ESP_LOGD(TAG, "No valid GPS position");
       }
 #endif
-#if (PAYLOAD_OPENSENSEBOX)
-      if (cfg.wifiscan)
-        payload.addCount(macs_wifi, MAC_SNIFF_WIFI);
-      if (cfg.blescan)
-        payload.addCount(macs_ble, MAC_SNIFF_BLE);
-#endif
+
 #if (HAS_SDS011)
       sds011_store(&sds_status);
       payload.addSDS(sds_status);
