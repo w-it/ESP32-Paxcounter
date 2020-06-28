@@ -32,6 +32,7 @@ void defaultConfig() {
       10; // BT channel scan cycle [seconds/100], default 1 (= 10ms)
   cfg.blescan = BLECOUNTER;        // 0=disabled, 1=enabled
   cfg.wifiscan = WIFICOUNTER;      // 0=disabled, 1=enabled
+  cfg.buttoninterval = BUTTONINTERVAL; 
   cfg.wifiant = 0;                 // 0=internal, 1=external (for LoPy/LoPy4)
   cfg.vendorfilter = VENDORFILTER; // 0=disabled, 1=enabled
   cfg.rgblum = RGBLUMINOSITY;      // RGB Led luminosity (0..100%)
@@ -126,6 +127,10 @@ void saveConfig() {
     if (nvs_get_i8(my_handle, "sendcycle", &flash8) != ESP_OK ||
         flash8 != cfg.sendcycle)
       nvs_set_i8(my_handle, "sendcycle", cfg.sendcycle);
+
+    if (nvs_get_i8(my_handle, "buttoninterval", &flash8) != ESP_OK ||
+        flash8 != cfg.buttoninterval)
+      nvs_set_i8(my_handle, "buttoninterval", cfg.buttoninterval);
 
     if (nvs_get_i8(my_handle, "wifichancycle", &flash8) != ESP_OK ||
         flash8 != cfg.wifichancycle)
@@ -280,6 +285,14 @@ void loadConfig() {
       saveConfig();
     }
 
+    if (nvs_get_i8(my_handle, "buttoninterval", &flash8) == ESP_OK) {
+      cfg.buttoninterval = flash8;
+      ESP_LOGI(TAG, "buttoninterval = %d", flash8);
+    } else {
+      ESP_LOGI(TAG, "Payload button interval set to default %d", cfg.buttoninterval);
+      saveConfig();
+    }
+
     if (nvs_get_i8(my_handle, "wifichancycle", &flash8) == ESP_OK) {
       cfg.wifichancycle = flash8;
       ESP_LOGI(TAG, "wifichancycle = %d", flash8);
@@ -334,7 +347,7 @@ void loadConfig() {
     } else {
       ESP_LOGI(TAG, "WIFIscanmode set to default %d", cfg.wifiscan);
       saveConfig();
-    }
+    }  
 
     if (nvs_get_i16(my_handle, "rssilimit", &flash16) == ESP_OK) {
       cfg.rssilimit = flash16;

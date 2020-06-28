@@ -8,6 +8,9 @@ static const char TAG[] = __FILE__;
 
 static Button *b = NULL;
 
+static unsigned long lastRegistered = 0;
+
+
 void buttoncounter_init(int pin) {
 
 #ifdef BUTTON_PULLDOWN
@@ -31,6 +34,12 @@ void buttoncounter_init(int pin) {
   });
   b->setOnPushed([]() {
     ESP_LOGI(TAG,"button pushed");
+    unsigned long now = millis();
+    if(now - lastRegistered >  cfg.buttoninterval * 1000){
+      nbr_start ++;
+      lastRegistered = now;
+      ESP_LOGI(TAG,"button pushed: registered");
+    }
   });
   b->setOnReleased([]() {
    // ESP_LOGI(TAG,"button released");

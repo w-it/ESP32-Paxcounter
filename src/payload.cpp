@@ -29,6 +29,11 @@ void PayloadConvert::addByte(uint8_t value) { writeUint8(value); }
 void PayloadConvert::addCount(uint16_t value, uint8_t snifftype) {
   writeUint16(value);
 }
+//startbutton
+void PayloadConvert::addStartButttonCount(uint16_t value, uint16_t interval){
+   writeUint16(value);
+   writeUint16(interval);
+}
 // beacon
 void PayloadConvert::addAlarm(int8_t rssi, uint8_t msg) {
   writeUint8(rssi);

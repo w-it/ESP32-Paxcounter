@@ -14,25 +14,25 @@ function Decoder(bytes, port) {
         if (bytes.length === 2) {
             return decode(bytes, [uint16], ['wifi']);
         }
-        // wifi + ble counter data, no gps
-        if (bytes.length === 4) {
-            return decode(bytes, [uint16, uint16], ['wifi', 'ble']);
-        }
-        // combined wifi counter and gps data, used by https://opensensemap.org
-        if (bytes.length === 10) {
-            return decode(bytes, [latLng, latLng, uint16], ['latitude', 'longitude', 'wifi']);
-        }
-        // combined wifi + ble counter and gps data, used by https://opensensemap.org
-        if (bytes.length === 12) {
-            return decode(bytes, [latLng, latLng, uint16, uint16], ['latitude', 'longitude', 'wifi', 'ble']);
-        }
+        // wifi + button  counter data, no gps
+        if (bytes.length === 6) {
+            return decode(bytes, [uint16, uint16, uint16], ['wifi', 'pressed', 'period']);
+        } 
+        // wifi + button + ble counter data, no gps
+        if (bytes.length === 8) {
+            return decode(bytes, [uint16, uint16, uint16, uint16], ['wifi', 'pressed', 'period', 'ble']);
+        }      
         // combined wifi counter and gps data
         if (bytes.length === 15) {
             return decode(bytes, [uint16, latLng, latLng, uint8, hdop, altitude], ['wifi', 'latitude', 'longitude', 'sats', 'hdop', 'altitude']);
         }
+         // combined wifi counter and gps data
+         if (bytes.length === 19) {
+            return decode(bytes, [uint16, uint16, uint16, latLng, latLng, uint8, hdop, altitude], ['wifi', 'pressed', 'period', 'latitude', 'longitude', 'sats', 'hdop', 'altitude']);
+        }
         // combined wifi + ble counter and gps data
-        if (bytes.length === 17) {
-            return decode(bytes, [uint16, uint16, latLng, latLng, uint8, hdop, altitude], ['wifi', 'ble', 'latitude', 'longitude', 'sats', 'hdop', 'altitude']);
+        if (bytes.length === 21) {
+            return decode(bytes, [uint16, uint16, uint16, uint16, latLng, latLng, uint8, hdop, altitude], ['wifi', 'pressed', 'period', 'ble', 'latitude', 'longitude', 'sats', 'hdop', 'altitude']);
         }
     }
 

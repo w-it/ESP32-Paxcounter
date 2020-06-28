@@ -82,6 +82,8 @@ uint8_t volatile channel = 0;           // channel rotation counter
 uint8_t batt_level = 0;                 // display value
 uint16_t volatile macs_total = 0, macs_wifi = 0,
                   macs_ble = 0; // globals for display
+uint16_t volatile nbr_start = 0;
+unsigned long volatile btn_time_start = millis(); // globals for startbutton
 
 hw_timer_t *ppsIRQ = NULL, *displayIRQ = NULL, *matrixDisplayIRQ = NULL;
 

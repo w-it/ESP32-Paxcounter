@@ -236,6 +236,13 @@ void set_wifiscan(uint8_t val[]) {
   switch_wifi_sniffer(cfg.wifiscan);
 }
 
+void set_startinterval(uint8_t val[]) {
+  ESP_LOGI(TAG, "Remote command: set START interval to %d",
+           val[0] );
+  cfg.buttoninterval = val[0];
+ 
+}
+
 void set_wifiant(uint8_t val[]) {
   ESP_LOGI(TAG, "Remote command: set Wifi antenna to %s",
            val[0] ? "external" : "internal");
@@ -372,7 +379,8 @@ static const cmd_t table[] = {
     {0x11, set_monitor, 1, true},       {0x12, set_beacon, 7, false},
     {0x13, set_sensor, 2, true},        {0x14, set_payloadmask, 1, true},
     {0x15, set_bme, 1, true},           {0x16, set_batt, 1, true},
-    {0x17, set_wifiscan, 1, true},      {0x80, get_config, 0, false},
+    {0x17, set_wifiscan, 1, true},      
+    {0x18, set_startinterval, 1, true}, {0x80, get_config, 0, false},
     {0x81, get_status, 0, false},       {0x83, get_batt, 0, false},
     {0x84, get_gps, 0, false},          {0x85, get_bme, 0, false},
     {0x86, get_time, 0, false},         {0x87, set_time, 0, false},

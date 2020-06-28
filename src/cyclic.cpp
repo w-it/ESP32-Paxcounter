@@ -150,6 +150,10 @@ void reset_counters() {
   macs_total = 0; // reset all counters
   macs_wifi = 0;
   macs_ble = 0;
+
+  nbr_start = 0;
+  btn_time_start = millis();
+
 #ifdef HAS_DISPLAY
   dp_plotCurve(0, true);
 #endif

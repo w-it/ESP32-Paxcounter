@@ -16,6 +16,9 @@ public:
   uint8_t *getBuffer(void);
   void addByte(uint8_t value);
   void addCount(uint16_t value, uint8_t sniffytpe);
+
+  void addStartButttonCount(uint16_t value, uint16_t interval);
+  
   void addConfig(configData_t value);
   void addStatus(uint16_t voltage, uint64_t uptime, float cputemp, uint32_t mem,
                  uint8_t reset1, uint8_t reset2);

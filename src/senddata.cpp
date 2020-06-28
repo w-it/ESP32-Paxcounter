@@ -53,10 +53,20 @@ void sendData() {
     case COUNT_DATA:
       payload.reset();
 
-      if (cfg.wifiscan)
+      if (cfg.wifiscan){
         payload.addCount(macs_wifi, MAC_SNIFF_WIFI);
-      if (cfg.blescan)
+      }
+      // use scope 
+      {
+      unsigned long interval =  millis() - btn_time_start;     
+      uint16_t packedInterval = (uint16_t) round(((double) interval)/ 1000.0);
+      ESP_LOGI(TAG, "interval %d", packedInterval);
+      payload.addStartButttonCount(nbr_start, packedInterval);
+      }
+      if (cfg.blescan){
         payload.addCount(macs_ble, MAC_SNIFF_BLE);
+      }
+
 
 #if (HAS_GPS)
       if (GPSPORT == COUNTERPORT) {

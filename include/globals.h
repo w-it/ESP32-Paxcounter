@@ -69,6 +69,7 @@ typedef struct {
   uint8_t countermode; // 0=cyclic unconfirmed, 1=cumulative, 2=cyclic confirmed
   int16_t rssilimit;   // threshold for rssilimiter, negative value!
   uint8_t sendcycle;   // payload send cycle [seconds/2]
+  uint8_t buttoninterval;   // button interval (only one event per interval is recorded)
   uint8_t wifichancycle; // wifi channel switch cycle [seconds/100]
   uint8_t blescantime;   // BLE scan cycle duration [seconds]
   uint8_t blescan;       // 0=disabled, 1=enabled
@@ -125,6 +126,8 @@ extern char lmic_event_msg[LMIC_EVENTMSG_LEN]; // display buffer
 extern uint8_t volatile channel;               // wifi channel rotation counter
 extern uint8_t batt_level;                     // display value
 extern uint16_t volatile macs_total, macs_wifi, macs_ble; // display values
+extern uint16_t volatile nbr_start; // display values
+extern unsigned long volatile btn_time_start;
 extern bool volatile TimePulseTick; // 1sec pps flag set by GPS or RTC
 extern timesource_t timeSource;
 extern hw_timer_t *displayIRQ, *matrixDisplayIRQ, *ppsIRQ;
