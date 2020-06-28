@@ -136,13 +136,21 @@ void RevBytes(unsigned char *b, size_t c) {
 }
 
 
+uint64_t getMacAdress(void){
+    uint64_t macAddress = ESP.getEfuseMac();
+    ESP_LOGI(TAG, "Macadress  0x%" PRIx64 , macAddress);
+ 
+
+    return macAddress;
+
+}
 
 uint32_t getChipId(void){
     uint64_t macAddress = ESP.getEfuseMac();
+    ESP_LOGI(TAG, "Macadress  0x%" PRIx64 , macAddress);
     uint64_t macAddressTrunc = macAddress << 40;
     uint32_t chipId = macAddressTrunc >> 40;
 
-    ESP_LOGI(TAG, "Macadress  0x%" PRIx64 , macAddress);
     ESP_LOGI(TAG," ESP8266 Chip id = %08X", chipId);
 
     return chipId;
@@ -151,13 +159,14 @@ uint32_t getChipId(void){
 
 
 lora_t findMatchingConfig(){
-  uint32_t chipId = getChipId();
+  uint64_t macAddress = getMacAdress();
   int i = loratablesize;
+ ESP_LOGI(TAG,"search config for: 0x%" PRIx64, macAddress);
 
   while (i--) {
-    ESP_LOGI(TAG,"there is config for: %08X ", lora_table[i].chipId);
-    if (chipId == lora_table[i].chipId){
-        ESP_LOGI(TAG,"config enabled for %08X ", chipId);
+    ESP_LOGI(TAG,"there is config for:  0x%" PRIx64, lora_table[i].chipId);
+    if (macAddress == lora_table[i].chipId){
+        ESP_LOGI(TAG,"config enabled for  0x%" PRIx64, lora_table[i].chipId);
         return lora_table[i];
     }
   }

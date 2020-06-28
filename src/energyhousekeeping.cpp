@@ -24,6 +24,6 @@ void nrgy_loop(void *pvParameters){
           ESP_LOGI(TAG, "GPS enabled");
           setGpsOn();
 #endif
-        delay(60 * 60 * 1000);
+        delay(3 * 60 * 1000);
     }
 }

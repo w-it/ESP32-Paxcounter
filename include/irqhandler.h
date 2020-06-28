@@ -11,9 +11,11 @@
 #define BME_IRQ 0x080
 #define MATRIX_DISPLAY_IRQ 0x100
 #define PMU_IRQ 0x200
+#define BUTTONCOUNTER_IRQ 0x400
 
 #include "globals.h"
 #include "button.h"
+#include "buttoncounter.h"
 #include "cyclic.h"
 #include "senddata.h"
 #include "timekeeper.h"
@@ -36,6 +38,7 @@ void IRAM_ATTR MatrixDisplayIRQ();
 #ifdef HAS_BUTTON
 void IRAM_ATTR ButtonIRQ();
 #endif
+void IRAM_ATTR ButtonCounterIRQ();
 
 #ifdef HAS_PMU
 void IRAM_ATTR PMUIRQ();

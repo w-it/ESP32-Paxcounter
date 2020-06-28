@@ -319,16 +319,22 @@ void setup() {
   }
 #endif
 
-    strcat_P(features, " NRGY-HOUSEKEEPING");
+strcat_P(features, " NRGY-HOUSEKEEPING");
 
-    ESP_LOGI(TAG, "Starting HOUSEKEEPING...");
-    xTaskCreatePinnedToCore(nrgy_loop,  // task function
-                            "energyhousekeeping", // name of task
-                            2048,      // stack size of task
-                            (void *)1, // parameter of the task
-                            1,         // priority of the task
-                            &NrgyHouseKeepingTask,  // task handle
-                            1);        // CPU core
+ESP_LOGI(TAG, "Starting HOUSEKEEPING...");
+xTaskCreatePinnedToCore(nrgy_loop,  // task function
+                        "energyhousekeeping", // name of task
+                        2048,      // stack size of task
+                        (void *)1, // parameter of the task
+                        1,         // priority of the task
+                        &NrgyHouseKeepingTask,  // task handle
+                        1);        // CPU core
+
+
+    strcat_P(features, " BUTTONCOUNT ");
+
+     buttoncounter_init(GPIO_NUM_13);
+
 
 // initialize sensors
 #if (HAS_SENSORS)
@@ -466,13 +472,16 @@ void setup() {
   strcat_P(features, "PU");
 #else
   strcat_P(features, "PD");
-#endif // BUTTON_PULLUP
+#endif // BUTTON_PULLUP 
   button_init(HAS_BUTTON);
 #endif // HAS_BUTTON
 
   // cyclic function interrupts
   sendcycler.attach(SENDCYCLE * 2, sendcycle);
   housekeeper.attach(HOMECYCLE, housekeeping);
+
+
+ 
 
 #if (TIME_SYNC_INTERVAL)
 

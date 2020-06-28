@@ -36,6 +36,11 @@ void irqHandler(void *pvParameters) {
     }
 #endif
 
+    if (InterruptStatus & BUTTONCOUNTER_IRQ) {
+      readButtonCounter();
+      InterruptStatus &= ~BUTTONCOUNTER_IRQ;
+    }
+
 // display needs refresh?
 #ifdef HAS_DISPLAY
     if (InterruptStatus & DISPLAY_IRQ) {
@@ -127,6 +132,16 @@ void IRAM_ATTR ButtonIRQ() {
     portYIELD_FROM_ISR();
 }
 #endif
+
+void IRAM_ATTR ButtonCounterIRQ() {
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+  xTaskNotifyFromISR(irqHandlerTask, BUTTONCOUNTER_IRQ, eSetBits,
+                     &xHigherPriorityTaskWoken);
+
+  if (xHigherPriorityTaskWoken)
+    portYIELD_FROM_ISR();
+}
 
 #ifdef HAS_PMU
 void IRAM_ATTR PMUIRQ() {
